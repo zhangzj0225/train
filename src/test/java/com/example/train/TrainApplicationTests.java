@@ -1,5 +1,6 @@
 package com.example.train;
 
+import com.example.train.filter.*;
 import com.example.train.service.TrainStationHandler;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,6 +31,7 @@ public class TrainApplicationTests {
 
         Assert.assertEquals("5", TrainStationHandler.getDistance("A", crossStations, "D"));
     }
+
     @Test
     public void distance_of_A_D_C_should_be_13() {
 
@@ -38,6 +40,7 @@ public class TrainApplicationTests {
 
         Assert.assertEquals("13", TrainStationHandler.getDistance("A", crossStations, "C"));
     }
+
     @Test
     public void distance_of_A_E_B_C_D_should_be_22() {
 
@@ -59,31 +62,32 @@ public class TrainApplicationTests {
     }
 
     @Test
-    public void number_of_trips_from_C_to_C_with_maximum_of_3_stops() throws CloneNotSupportedException {
-        Assert.assertEquals("2", TrainStationHandler.findTrips("C", "C",3,false));
+    public void number_of_trips_from_C_to_C_with_maximum_of_3_stops() {
+        System.out.println("number_of_trips_from_C_to_C_with_maximum_of_3_stops");
+        Assert.assertEquals(2, TrainStationHandler.findTrips("C", "C", new MaximumStopsFilter(3), null).size());
     }
 
     @Test
-    public void number_of_trips_from_A_to_C_with_exactly_of_4_stops() throws CloneNotSupportedException {
-        Assert.assertEquals("2", TrainStationHandler.findTrips("C", "C",4,true));
+    public void number_of_trips_from_A_to_C_with_exactly_of_4_stops() {
+        System.out.println("number_of_trips_from_A_to_C_with_exactly_of_4_stops");
+        Assert.assertEquals(3, TrainStationHandler.findTrips("A", "C", new MaximumStopsFilter(4), new ExactlyStopsFilter(4)).size());
     }
 
-//    @Test
-//    public void length_of_the_shortest_route_from_A_to_C() throws CloneNotSupportedException {
-//        Assert.assertEquals("9", TrainStationHandler.findTrips("C", "C",1,true));
-//    }
-//
-//    @Test
-//    public void length_of_the_shortest_route_from_B_to_B() throws CloneNotSupportedException {
-//        Assert.assertEquals("9", TrainStationHandler.findTrips("C", "C",4,true));
-//    }
-//    @Test
-//    public void  number_of_different_routes_from_C_to_C_with_a_distance_of_less_than_30() throws CloneNotSupportedException {
-//        Assert.assertEquals("7", TrainStationHandler.findTrips("C", "C",4,true));
-//    }
+    @Test
+    public void length_of_the_shortest_route_from_A_to_C() {
+        System.out.println("length_of_the_shortest_route_from_A_to_C");
+        Assert.assertEquals(9, TrainStationHandler.findTrips("A", "C", new NoRepetitiveRouteFilter(), new ShortestTripFilter()).get(0).getTripDistance());
+    }
 
+    @Test
+    public void length_of_the_shortest_route_from_B_to_B() {
+        System.out.println("length_of_the_shortest_route_from_B_to_B");
+        Assert.assertEquals(9, TrainStationHandler.findTrips("B", "B", new NoRepetitiveRouteFilter(), new ShortestTripFilter()).get(0).getTripDistance());
+    }
 
-
-
+    @Test
+    public void  number_of_different_routes_from_C_to_C_with_a_distance_of_less_than_30()  {
+        Assert.assertEquals(7, TrainStationHandler.findTrips("C", "C",new DistanceLessThaFilter(30),null).size());
+    }
 
 }

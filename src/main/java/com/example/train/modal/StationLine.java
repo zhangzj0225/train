@@ -6,6 +6,15 @@ public class StationLine {
     private String end;
     private int distance;
 
+    @Override
+    public String toString() {
+        return "StationLine{" +
+                "start='" + start + '\'' +
+                ", end='" + end + '\'' +
+                ", distance=" + distance +
+                '}';
+    }
+
     public StationLine(String start, String end, int distance) {
         this.start = start;
         this.end = end;
@@ -48,4 +57,23 @@ public class StationLine {
         return this.start.equals(start);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StationLine that = (StationLine) o;
+
+        if (distance != that.distance) return false;
+        if (!start.equals(that.start)) return false;
+        return end.equals(that.end);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = start.hashCode();
+        result = 31 * result + end.hashCode();
+        result = 31 * result + distance;
+        return result;
+    }
 }

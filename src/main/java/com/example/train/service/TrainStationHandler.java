@@ -1,10 +1,12 @@
 package com.example.train.service;
 
-import com.example.train.modal.Graph;
+import com.example.train.filter.ConditionFilter;
+import com.example.train.filter.PassFilter;
 import com.example.train.modal.StationLine;
 import com.example.train.modal.Trip;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.train.modal.Graph.getGraphs;
 import static com.example.train.modal.Graph.getStationLine;
@@ -29,38 +31,32 @@ public class TrainStationHandler {
         return totalDistance + "";
     }
 
-    public static String findTrips(String start, String end, int maximumStops,boolean exactly) throws CloneNotSupportedException {
-        ArrayList<Trip> result = findTrips(start, end, new ArrayList<>(), maximumStops, new Trip(),exactly);
-        result.stream().forEach(trip -> System.out.println(trip));
-        return result.size() + "";
+    public static List<Trip> findTrips(String start, String end, PassFilter passFilter, ConditionFilter conditionFilter) {
+        List<Trip> trips = findTrips(start, end, new ArrayList<>(), new Trip(), passFilter);
+        if (null != conditionFilter) {
+            trips = conditionFilter.filter(trips);
+        }
+        trips.stream().forEach(trip -> System.out.println(trip));
+        return trips;
     }
 
-    private static void deepFind(String endStation, ArrayList<Trip> resultTrips, Trip currentTrip, int maximumStops, boolean exactly) throws CloneNotSupportedException {
-        StationLine line = currentTrip.getLastStationLine();
-        int stopsSize = currentTrip.getTripDetails().size();
-
-        if (stopsSize < maximumStops) {
-            findTrips(currentTrip.getLastStationLine().getEndStation(), endStation, resultTrips, maximumStops, (Trip) currentTrip.clone(),exactly);
-        }
-        if (currentTrip.getLastStationLine().getEndStation().equals(endStation)) {
-            if (exactly && stopsSize == maximumStops) {
+    private static void deepFind(String endStation, ArrayList<Trip> resultTrips, Trip currentTrip, PassFilter filter) {
+        if (null != filter && filter.canPass(currentTrip)) {
+            if (currentTrip.isDestination(endStation)) {
                 resultTrips.add(currentTrip);
             }
-            if (!exactly && stopsSize <= maximumStops) {
-                resultTrips.add(currentTrip);
-            }
+            findTrips(currentTrip.getLastStationLine().getEndStation(), endStation, resultTrips, currentTrip.deepCopy(), filter);
         }
 
 
     }
 
-    private static ArrayList<Trip> findTrips(String startStation, String endStation, ArrayList<Trip> resultTrips, int maximumStops, Trip currentTrip, boolean exactly) throws CloneNotSupportedException {
+    private static ArrayList<Trip> findTrips(String startStation, String endStation, ArrayList<Trip> resultTrips, Trip currentTrip, PassFilter filter) {
         for (StationLine line : getGraphs()) {
             if (line.stationStartWith(startStation)) {
-                Trip cloneTrip = (Trip) currentTrip.clone();
+                Trip cloneTrip = currentTrip.deepCopy();
                 cloneTrip.addStationLine(line);
-//                searchableTrips.add(cloneTrip);
-                deepFind(endStation, resultTrips, cloneTrip, maximumStops,exactly);
+                deepFind(endStation, resultTrips, cloneTrip, filter);
             }
         }
 

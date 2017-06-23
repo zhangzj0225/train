@@ -2,7 +2,9 @@ package com.example.train.filter;
 
 import com.example.train.modal.Trip;
 
-public class MaximumStopsFilter implements TripFilter {
+import java.util.List;
+
+public class MaximumStopsFilter implements PassFilter {
 
     private int maximumStops;
 
@@ -14,4 +16,5 @@ public class MaximumStopsFilter implements TripFilter {
     public boolean canPass(Trip trip) {
         return trip.getTripDetails().size() <= maximumStops;
     }
+
 }
