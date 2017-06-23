@@ -68,19 +68,19 @@ public class TrainApplicationTests {
         Assert.assertEquals("2", TrainStationHandler.findTrips("C", "C",4,true));
     }
 
-    @Test
-    public void length_of_the_shortest_route_from_A_to_C() throws CloneNotSupportedException {
-        Assert.assertEquals("9", TrainStationHandler.findTrips("C", "C",1,true));
-    }
-
-    @Test
-    public void length_of_the_shortest_route_from_B_to_B() throws CloneNotSupportedException {
-        Assert.assertEquals("9", TrainStationHandler.findTrips("C", "C",4,true));
-    }
-    @Test
-    public void  number_of_different_routes_from_C_to_C_with_a_distance_of_less_than_30() throws CloneNotSupportedException {
-        Assert.assertEquals("7", TrainStationHandler.findTrips("C", "C",4,true));
-    }
+//    @Test
+//    public void length_of_the_shortest_route_from_A_to_C() throws CloneNotSupportedException {
+//        Assert.assertEquals("9", TrainStationHandler.findTrips("C", "C",1,true));
+//    }
+//
+//    @Test
+//    public void length_of_the_shortest_route_from_B_to_B() throws CloneNotSupportedException {
+//        Assert.assertEquals("9", TrainStationHandler.findTrips("C", "C",4,true));
+//    }
+//    @Test
+//    public void  number_of_different_routes_from_C_to_C_with_a_distance_of_less_than_30() throws CloneNotSupportedException {
+//        Assert.assertEquals("7", TrainStationHandler.findTrips("C", "C",4,true));
+//    }
 
 
 

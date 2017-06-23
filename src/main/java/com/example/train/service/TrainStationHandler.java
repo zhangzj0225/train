@@ -1,26 +1,16 @@
 package com.example.train.service;
 
+import com.example.train.modal.Graph;
 import com.example.train.modal.StationLine;
 import com.example.train.modal.Trip;
 
 import java.util.ArrayList;
 
+import static com.example.train.modal.Graph.getGraphs;
+import static com.example.train.modal.Graph.getStationLine;
+
 public class TrainStationHandler {
 
-    private static ArrayList<StationLine> graphs = new ArrayList<>();
-    String[] graph = new String[]{"AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7"};
-
-    static {
-        graphs.add(new StationLine("A", "B", 5));
-        graphs.add(new StationLine("B", "C", 4));
-        graphs.add(new StationLine("C", "D", 8));
-        graphs.add(new StationLine("D", "C", 8));
-        graphs.add(new StationLine("D", "E", 6));
-        graphs.add(new StationLine("A", "D", 5));
-        graphs.add(new StationLine("C", "E", 2));
-        graphs.add(new StationLine("E", "B", 3));
-        graphs.add(new StationLine("A", "E", 7));
-    }
 
     public static String getDistance(String begin, ArrayList<String> crossStations, String end) {
 
@@ -37,17 +27,6 @@ public class TrainStationHandler {
         }
 
         return totalDistance + "";
-    }
-
-    private static StationLine getStationLine(String startStation, String endStation) {
-        StationLine stationLine = null;
-        for (StationLine line : graphs) {
-            if (line.lineEquals(startStation, endStation)) {
-                stationLine = line;
-                break;
-            }
-        }
-        return stationLine;
     }
 
     public static String findTrips(String start, String end, int maximumStops,boolean exactly) throws CloneNotSupportedException {
@@ -76,7 +55,7 @@ public class TrainStationHandler {
     }
 
     private static ArrayList<Trip> findTrips(String startStation, String endStation, ArrayList<Trip> resultTrips, int maximumStops, Trip currentTrip, boolean exactly) throws CloneNotSupportedException {
-        for (StationLine line : graphs) {
+        for (StationLine line : getGraphs()) {
             if (line.stationStartWith(startStation)) {
                 Trip cloneTrip = (Trip) currentTrip.clone();
                 cloneTrip.addStationLine(line);
