@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class Graph {
 
     private static ArrayList<StationLine> graphs = new ArrayList<>();
-    String[] graph = new String[]{"AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7"};
 
     private Graph() {
     }
